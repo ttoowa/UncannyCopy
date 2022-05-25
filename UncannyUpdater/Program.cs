@@ -46,7 +46,10 @@ namespace UncannyUpdater {
 
 				Console.Write($"Copy {filename}... ");
 
-				Directory.CreateDirectory(dstFilename);
+				string dstSubDir = Path.GetDirectoryName(dstFilename);
+				if (!Directory.Exists(dstSubDir)) {
+					Directory.CreateDirectory(dstSubDir);
+				}
 				if (new FileInfo(srcFilename).LastWriteTimeUtc > new FileInfo(dstFilename).LastWriteTimeUtc) {
 					try {
 						File.Copy(srcFilename, dstFilename, true);
