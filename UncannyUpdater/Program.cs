@@ -39,15 +39,21 @@ namespace UncannyUpdater {
 				string srcFilename = Path.Combine(srcDir, filename);
 				string dstFilename = Path.Combine(dstDir, filename);
 
-				if (new FileInfo(srcFilename).LastWriteTimeUtc > new FileInfo(dstFilename).LastWriteTimeUtc) {
-					Console.Write($"Copy {filename}...");
+				if (File.Exists(srcFilename)) {
+					Console.WriteLine($"SrcFile '{filename}' not found.");
+					return;
+				}
 
+				Console.Write($"Copy {filename}... ");
+
+				Directory.CreateDirectory(dstFilename);
+				if (new FileInfo(srcFilename).LastWriteTimeUtc > new FileInfo(dstFilename).LastWriteTimeUtc) {
 					try {
 						File.Copy(srcFilename, dstFilename, true);
+						Console.Write("Complete");
 					} catch (Exception ex) {
 						Console.Write("Error");
 					}
-					Console.Write("Complete");
 				} else {
 					Console.Write("Skip");
 				}
