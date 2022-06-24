@@ -1,0 +1,10 @@
+{
+  "itemGroups": [
+    {
+      "srcDir": "../",
+      "dstDir": "./",
+      "filenames": [
+      ]
+    }
+  ]
+}
