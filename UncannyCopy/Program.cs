@@ -52,7 +52,7 @@ public class Program {
             var dstDir = jItemGroup["dstDir"].ToObject<string>();
 
             Console.WriteLine("───────────────────────────────────────");
-            Console.WriteLine($"[ItemGroup {index++}] \n    Src : '{srcDir}'\n    Dst : '{dstDir}'");
+            Console.WriteLine($"[ItemGroup {index++}] \nSrc : '{srcDir}'\nDst : '{dstDir}'");
 
             var jFilenames = jItemGroup["filenames"] as JArray;
             foreach (JValue jFilename in jFilenames) {
@@ -62,11 +62,11 @@ public class Program {
                 var dstFilename = Path.Combine(dstDir, filename);
 
                 if (!File.Exists(srcFilename)) {
-                    Console.WriteLine($"SrcFile '{filename}' not found.");
+                    Console.WriteLine($"    SrcFile '{filename}' not found.");
                     return;
                 }
 
-                Console.Write($"Copy {filename}... ");
+                Console.Write($"    Copy {filename}... ");
 
                 var dstSubDir = Path.GetDirectoryName(dstFilename);
                 if (!Directory.Exists(dstSubDir)) Directory.CreateDirectory(dstSubDir);
