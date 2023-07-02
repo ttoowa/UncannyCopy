@@ -6,25 +6,44 @@ namespace UncannyCopy;
 
 public class Program {
     public static void Main(string[] args) {
-        UpdateModules();
+        List<string> configFileList = new List<string>();
+        foreach (var arg in args) {
+            string actualArg = arg.Trim();
+            if (actualArg.EndsWith(".json")) {
+                configFileList.Add(actualArg);
+            }
+        }
 
+        if (configFileList.Count == 0) {
+            ExecuteCopy();
+        } else {
+            foreach (var configFile in configFileList) {
+                ExecuteCopy(configFile);
+            }
+        }
+        
         Console.ReadLine();
     }
 
-    private static void UpdateModules() {
+    private static void ExecuteCopy(string configFile = null) {
         var currentAppFilename = Process.GetCurrentProcess().MainModule.FileName;
         var currentAppFilenameOnly = Path.GetFileNameWithoutExtension(currentAppFilename);
         var currentAppDir = Path.GetDirectoryName(currentAppFilename);
-        var configFilename = Path.Combine(currentAppDir, $"{currentAppFilenameOnly}.json");
+        
+        if (configFile == null) {
+            configFile = Path.Combine(currentAppDir, $"{currentAppFilenameOnly}.json");
+        }
+        
+        string configFilenameOnly = Path.GetFileName(configFile);
 
         Directory.SetCurrentDirectory(currentAppDir);
 
-        if (!File.Exists(configFilename)) {
-            Console.WriteLine("Config file not found.");
+        if (!File.Exists(configFile)) {
+            Console.WriteLine($"Config file not found. '{configFile}'");
             return;
         }
 
-        var configJson = File.ReadAllText(configFilename, Encoding.UTF8);
+        var configJson = File.ReadAllText(configFile, Encoding.UTF8);
         var jRoot = JObject.Parse(configJson);
         var jItemGroups = jRoot["itemGroups"] as JArray;
         var index = 0;
@@ -66,6 +85,6 @@ public class Program {
             }
         }
 
-        Console.WriteLine("All task completed.");
+        Console.WriteLine($"Task completed for '{configFilenameOnly}'");
     }
 }
